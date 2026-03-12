@@ -1,0 +1,53 @@
+# claude-easy-workflow-kit — プロジェクト設定
+#
+# デフォルト値は Convention-over-Configuration で決まっている。
+# 既存プロジェクトに導入する場合、合わないパスだけオーバーライドすればよい。
+# このファイルは scaffold 時に .claude/workflow.yaml としてコピーされる。
+
+# --- パス設定 ---
+paths:
+  # アクティブタスク（/plan, /implement, /restart が参照）
+  tasks: tasks/current.md
+
+  # 自己改善ログ（/plan, /strategy が参照）
+  lessons: tasks/lessons.md
+
+  # ロードマップ（/strategy, /save が参照）
+  roadmap: docs/ROADMAP.md
+
+  # 開発ログディレクトリ（/save が追記）
+  devlog_dir: docs/devlog/
+
+  # 開発ログインデックス（/save が更新）
+  devlog_index: docs/DEVLOG.md
+
+# --- 外部ツール ---
+tools:
+  # Codex CLI（コードレビュー・プランレビュー）
+  # true: `codex exec` を使う / false: 自己レビューにフォールバック
+  codex: false
+
+  # Gemini CLI（大規模分析・Web調査）
+  # true: `gemini -p` を使う / false: Explore サブエージェントで代替
+  gemini: false
+
+  # GitHub CLI（Issue/Milestone 管理）
+  # true: `gh` を使う / false: GitHub 連携をスキップ
+  gh: false
+
+# --- Git 設定 ---
+git:
+  # コミットメッセージスタイル: conventional | freeform
+  commit_style: conventional
+
+  # push 後にサマリを表示する
+  show_summary: true
+
+# --- ワークフロー設定 ---
+workflow:
+  # Full workflow: /strategy → /plan → /implement → /debug → /review → /save
+  # Fast path:    /implement → /review → /save（小修正・緊急修正用）
+  #
+  # fast_path_allowed: true にすると、Claude が変更規模を判断して
+  # strategy/plan をスキップできる。false なら常に Full workflow。
+  fast_path_allowed: true
