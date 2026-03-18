@@ -80,3 +80,13 @@
 
 どの方向性を選びますか？
 ```
+
+---
+
+## Routing to Deep Strategy
+
+If the theme is complex — involving multiple viable directions, high-stakes trade-offs, or architectural decisions that benefit from multi-perspective critique — suggest:
+
+> "This theme may benefit from deeper analysis. You can run `/strategy_deep [theme]` for a multi-round forging process with external critique."
+
+Do not auto-escalate. The user decides.

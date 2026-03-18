@@ -43,6 +43,20 @@ git status に変更ファイルが表示される
 次の未完了タスクから /implement を再開する
 ```
 
+#### Case D: Deep Strategy session is interrupted
+
+```
+tasks/strategy_context.md exists
+AND status: in_progress
+  ↓
+Read Theme Core, current strategy draft, and unresolved issues
+  ↓
+Ask user: "Interrupted /strategy_deep session found. Resume?"
+  ↓
+Yes → Resume /strategy_deep with the Theme Core from strategy_context.md
+No  → Fall through to normal recovery (Case A/B/C)
+```
+
 #### ケース C: すべて完了している
 
 ```

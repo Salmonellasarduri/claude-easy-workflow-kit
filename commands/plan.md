@@ -17,6 +17,7 @@
 以下のファイルを読む（パスは `workflow.yaml` を参照）:
 - タスクファイル — 現在のタスク
 - レッスンファイル — 関連する過去の教訓
+- `tasks/strategy_context.md` — **Read only if it exists.** Contains forging results from `/strategy_deep`. Incorporate acceptance criteria, resolved issues, and remaining risks into the plan
 
 ### 2. コードベース調査
 

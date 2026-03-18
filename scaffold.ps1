@@ -96,11 +96,20 @@ Create-IfNotExists "$ProjectPath\docs\DEVLOG.md" @"
 ---
 "@
 
+Create-IfNotExists "$ProjectPath\tasks\strategy_context.md" @"
+# Strategy Context
+
+> This file is written by /strategy_deep and consumed by /plan.
+> Do not edit manually unless you know what you are doing.
+
+status: empty
+"@
+
 $devlogDir = "$ProjectPath\docs\devlog"
 if (-not (Test-Path $devlogDir)) { New-Item -ItemType Directory -Path $devlogDir -Force | Out-Null }
 
 Write-Host ""
-Write-Host "Done! Your project is ready to use /strategy, /plan, /implement, /debug, /review, /save, /restart." -ForegroundColor Cyan
+Write-Host "Done! Your project is ready to use /strategy, /strategy_deep, /plan, /implement, /debug, /review, /save, /restart." -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Next steps:"
 Write-Host "  1. Edit .claude/workflow.yaml to match your project (paths, tools, etc.)"
