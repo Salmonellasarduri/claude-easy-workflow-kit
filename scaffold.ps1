@@ -9,7 +9,10 @@ param(
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ResolvedProject = Resolve-Path $ProjectPath -ErrorAction SilentlyContinue
-if (-not $ResolvedProject) { $ResolvedProject = Resolve-Path "." }
+if (-not $ResolvedProject) {
+    Write-Error "ProjectPath does not exist: $ProjectPath"
+    exit 1
+}
 $ProjectPath = $ResolvedProject.Path
 
 # Refuse to scaffold the kit into itself

@@ -1,3 +1,8 @@
+---
+description: Decide the next development direction, present three options, and wait for the user to choose before planning.
+argument-hint: "[task or goal]"
+---
+
 # /strategy — 戦略方向性の決定
 
 ## 目的

@@ -46,7 +46,7 @@ git:
 # --- ワークフロー設定 ---
 workflow:
   # Full workflow: /strategy → /design → /implement → /debugging → /reviewing → /save
-  # Fast path:    /implement → /reviewing → /save（小修正・緊急修正用）
+  # Fast path:    /implement → /debugging → /reviewing → /save（小修正・緊急修正用）
   #
   # fast_path_allowed: true にすると、Claude が変更規模を判断して
   # strategy/design をスキップできる。false なら常に Full workflow。

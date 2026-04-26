@@ -1,3 +1,8 @@
+---
+description: Run a multi-round strategy-forging process to detect architecture risks, hidden dependencies, cross-file breakage, and concept drift before implementation.
+argument-hint: "[strategic theme]"
+---
+
 # /strategy_deep — Multi-Perspective Iterative Strategy Design
 
 ## Purpose

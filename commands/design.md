@@ -1,3 +1,8 @@
+---
+description: Create an implementation plan with acceptance criteria after a direction has been chosen.
+argument-hint: "[selected direction or task]"
+---
+
 # /design — タスク設計・調査
 
 ## 目的
@@ -44,7 +49,7 @@
 
 ### 3. 実装プランを設計する
 
-`schemas/handoff.md` の PlanArtifact 形式に従う:
+`.claude/schemas/handoff.md` の PlanArtifact 形式に従う:
 - 変更するファイル一覧
 - 実装ステップ（順序付き）
 - 受け入れ基準

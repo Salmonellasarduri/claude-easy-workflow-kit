@@ -33,6 +33,12 @@ done
 
 PROJECT_DIR="${PROJECT_DIR:-.}"
 
+# Validate that the path exists (otherwise `cd` would fail with a cryptic message)
+if [[ ! -d "$PROJECT_DIR" ]]; then
+  echo "Error: project path does not exist: $PROJECT_DIR" >&2
+  exit 1
+fi
+
 # Refuse to scaffold the kit into itself (catches accidental `./scaffold.sh --force` with no path)
 if [[ "$(cd "$PROJECT_DIR" && pwd)" == "$SCRIPT_DIR" ]]; then
   echo "Error: refusing to scaffold into the kit's own directory ($SCRIPT_DIR)." >&2

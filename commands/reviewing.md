@@ -1,10 +1,15 @@
+---
+description: Review code changes or an implementation plan and return lgtm, needs_fix, or blocker.
+argument-hint: "[diff, plan, or review target]"
+---
+
 # /reviewing — コードレビュー
 
 > 注: 旧名 `/review` は Claude Code 同梱 built-in command と衝突するため `/reviewing` にリネーム済み。
 
 ## 目的
 
-コード変更またはプラン文面をレビューし、`ReviewResult/1.0`（`schemas/handoff.md` 参照）形式で品質を判定する。
+コード変更またはプラン文面をレビューし、`ReviewResult/1.0`（`.claude/schemas/handoff.md` 参照）形式で品質を判定する。
 
 ## 前提条件
 

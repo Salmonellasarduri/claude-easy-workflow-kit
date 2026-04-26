@@ -1,3 +1,8 @@
+---
+description: Verify implementation behavior against acceptance criteria using tests or proof scripts, then clean up test data.
+argument-hint: "[what to verify]"
+---
+
 # /debugging — デバッグ・動作検証ループ
 
 > 注: 旧名 `/debug` は Claude Code 同梱 skill と衝突するため `/debugging` にリネーム済み。

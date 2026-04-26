@@ -1,3 +1,8 @@
+---
+description: Implement an approved plan, then run /debugging and /reviewing before proposing /save.
+argument-hint: "[approved task]"
+---
+
 # /implement — 実装・デバッグループ
 
 ## 目的

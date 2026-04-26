@@ -41,6 +41,7 @@ Evaluate ONLY these dimensions:
 2. Value proposition gaps — where the product value is weak or unclear
 3. Competitive landscape — lessons from similar projects or tools
 4. Hidden opportunities — what the strategy could achieve but overlooks
+5. Concept drift — whether the proposed strategy drifts away from the original product concept, user promise, or project identity
 
 List issues in this format:
 - [critical/major/minor] Issue description

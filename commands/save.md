@@ -1,3 +1,8 @@
+---
+description: Update project records, commit, and push only after review passes and the user explicitly approves saving.
+argument-hint: "[commit summary]"
+---
+
 # /save — コミット・push・ドキュメント更新
 
 ## 目的

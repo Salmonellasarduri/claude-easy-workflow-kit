@@ -1,3 +1,8 @@
+---
+description: Recover an interrupted CEWK workflow by checking git status, task state, and strategy_context.
+argument-hint: ""
+---
+
 # /restart — 中断後の自動復旧
 
 ## 目的
