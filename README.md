@@ -1,14 +1,89 @@
-# claude-easy-workflow-kit
+# Claude Easy Workflow Kit
 
-A workflow automation kit for Claude Code. Type `/strategy` and Claude handles planning, implementation, testing, review, and saving — you just choose options and say yes or no.
+**A Claude Code workflow kit for vibe coding without losing the thread.**
 
-Battle-tested across 1,600+ real development sessions on a 190K-line codebase (167K Python, 1,167 files, 900+ commits) — [Artificial Personality](https://github.com/Salmonellasarduri/Artificial-Personality), an autonomous Discord-based personality agent.
+Type `/strategy`, choose a direction, approve the plan, and let Claude move through implementation, verification, review, and saving with clear checkpoints.
+
+For bigger decisions, use `/strategy_deep`: a multi-perspective strategy loop that stress-tests architecture, product fit, hidden dependencies, and concept drift before you start coding.
+
+This kit was shaped through **1,600+ real Claude Code development sessions** on **Artificial Personality**, a **190K-line / 1,167-file / 900+ commit** autonomous Discord personality-agent project. The main use case is simple: keep a large vibe-coded codebase from quietly drifting, breaking across file boundaries, or losing its original concept.
 
 ---
 
-## Quick Start
+## What this does
 
-### Unix / macOS / WSL
+Most AI coding sessions fail in the same places:
+
+- you start coding before deciding the direction
+- the plan is vague
+- tests are skipped
+- review is skipped
+- commits contain accidental unrelated changes
+- the project slowly drifts away from the original concept
+
+Claude Easy Workflow Kit turns that into a repeatable loop.
+
+```text
+/strategy
+  → choose A / B / C
+  → approve plan
+  → Claude implements
+  → Claude verifies acceptance criteria
+  → Claude reviews
+  → you approve save
+  → commit / push / devlog update
+```
+
+You stay responsible for decisions. Claude handles the procedure.
+
+---
+
+## Why `/strategy_deep` matters
+
+`/strategy` is for ordinary work.
+
+`/strategy_deep` is for decisions where a normal vibe-coding flow is likely to miss something:
+
+- architecture changes
+- large refactors
+- feature direction changes
+- product-concept alignment
+- “this feels right, but might break the whole structure” moments
+
+It runs an iterative strategy-forging loop:
+
+```text
+theme
+  → Claude drafts a strategy
+  → technical critic finds implementation / architecture risks
+  → product critic finds UX / value / concept-drift risks
+  → Claude rebuilds the strategy
+  → repeat until you finalize
+```
+
+Use it when the cost of a wrong direction is higher than the cost of thinking one more round.
+
+Example:
+
+```text
+/strategy_deep "Should we split the memory system into multiple services or keep it in the monolith?"
+```
+
+The output is not just “one answer.” It gives you:
+
+- issues found by each perspective
+- critical / major / minor risk counts
+- what changed across rounds
+- three final options
+- a recommendation with remaining risks
+
+This is the part of the kit that helps keep a large AI-assisted codebase coherent.
+
+---
+
+## Quick start
+
+### macOS / Linux / WSL
 
 ```bash
 git clone https://github.com/Salmonellasarduri/claude-easy-workflow-kit.git
@@ -24,166 +99,165 @@ cd claude-easy-workflow-kit
 .\scaffold.ps1 -ProjectPath C:\path\to\your\project
 ```
 
-### Manual Setup
+Then open your project in Claude Code and run:
 
-Copy files to your project's `.claude/` directory:
-
-```
-commands/*.md  → .claude/commands/
-rules/*.md     → .claude/rules/
-schemas/       → .claude/schemas/
-workflow.yaml  → .claude/workflow.yaml
+```text
+/strategy
 ```
 
 ---
 
-## How It Works
+## Installation check
 
-Type `/strategy` in Claude Code. That's the only command you need to know.
+After scaffolding, your target project should contain:
 
+```text
+.claude/
+  commands/
+  skills/
+  rules/
+  schemas/
+  workflow.yaml
+
+tasks/
+  current.md
+  lessons.md
+  strategy_context.md
+
+docs/
+  ROADMAP.md
+  DEVLOG.md
+  devlog/
 ```
-You:    "I want to add login functionality /strategy"
-Claude: "Here are 3 approaches. Which one?"
-You:    "B"
-Claude: (plans → implements → tests → reviews automatically)
-Claude: "Review passed. Commit?"
-You:    "Yes"
-Claude: (commits, pushes, updates docs)
+
+If `.claude/skills/` is missing, the workflow commands may still appear, but the richer skill-based behavior will not be available.
+
+---
+
+## 30-second example
+
+```text
+You:
+Add login functionality /strategy
+
+Claude:
+I see three directions.
+
+A: minimal email/password login
+B: OAuth-first login
+C: temporary invite-code login
+
+Recommendation: B, because...
+
+You:
+B
+
+Claude:
+Here is the implementation plan.
+It will change these files, add these tests, and prove these acceptance criteria.
+Proceed?
+
+You:
+yes
+
+Claude:
+Implements → debugs → reviews
+
+Claude:
+Review passed. Save this?
+
+You:
+yes
+
+Claude:
+Commits, pushes, and updates the devlog.
 ```
 
-Under the hood, Claude chains these steps automatically:
+---
 
-```
+## The normal workflow
+
+```text
 /strategy → /design → /implement → /debugging → /reviewing → /save
 ```
 
-> **Naming note**: `/debugging` and `/reviewing` use gerund form to avoid collisions with Claude Code's bundled `/debug` skill and `/review` built-in command (skills/built-ins take precedence over project commands, so same-name project commands silently fail to load).
-
-You're only asked at decision points:
-
-| When | What you're asked |
-|------|------------------|
-| Direction is set | "A, B, or C?" |
-| Plan is ready | "Proceed with this plan?" |
-| Review has issues | "Fix these?" |
-| Ready to save | "Commit?" |
-
----
-
-## 8 Commands
-
-You typically only type `/strategy` (or `/strategy_deep` for complex decisions). Claude calls the rest automatically.
-
-### `/strategy`
-
-**Entry point.** Analyzes the current state and presents 3 directional options. You pick one, Claude sets up the tasks.
-
-- **What it solves**: Decision paralysis, inconsistent project direction
-- **Limitations**: Single-pass analysis. For complex, high-stakes decisions, use `/strategy_deep`
-
-### `/strategy_deep`
-
-**Multi-round strategy forging.** Runs iterative critique loops with multiple perspectives (Codex, Gemini, or Claude sub-agents) to stress-test a strategy before committing to it.
-
-- **What it solves**: Blind spots in complex decisions. Catches structural weaknesses that a single-pass `/strategy` would miss
-- **What it gives you**: A strategy tested from technical and product perspectives, with a documented trail of issues found and resolved
-- **Limitations**: Token-intensive (multiple rounds). Best for high-stakes architectural or directional decisions, not routine tasks. External tools (Codex/Gemini) are recommended but not required
-
-```
-/strategy_deep "Should we migrate to microservices or keep the monolith?"
-```
-
-**When to use which:**
-
-| Situation | Command |
-|-----------|---------|
-| Routine direction setting, small features | `/strategy` |
-| Complex trade-offs, multiple viable paths | `/strategy_deep` |
-| High-stakes architectural decisions | `/strategy_deep` |
-| Quick bug fix or minor change | Neither (use fast path) |
-
-### `/design`
-
-Creates a detailed implementation plan with acceptance criteria. Automatically reads forging results from `/strategy_deep` if available.
-
-### `/implement`
-
-Writes code following the approved plan. Calls `/debugging` automatically.
-
-### `/debugging`
-
-Tests and verifies changes. Loops until acceptance criteria are proven. (Named `/debugging` rather than `/debug` to avoid collision with Claude Code's bundled `/debug` skill.)
-
-### `/reviewing`
-
-Code review. Uses Codex CLI if available, otherwise self-reviews against a checklist. (Named `/reviewing` rather than `/review` to avoid collision with Claude Code's built-in `/review` command.)
-
-### `/save`
-
-Commits, pushes, and updates documentation. Only runs after `/reviewing` passes.
-
-### `/restart`
-
-Detects where an interrupted session stopped and resumes. Also detects interrupted `/strategy_deep` sessions.
-
----
-
-## Bundled Skills
-
-Five skills are bundled in [`skills/`](skills/) and loaded on demand by the commands above:
-
-| Skill | Purpose | Loaded by |
+| Step | What happens | Human checkpoint |
 |---|---|---|
-| `plan-researcher` | Codebase investigation, returns `ResearchResult/1.0` | `/design` |
-| `codex-analyst` | Code/plan review via Codex CLI, returns `ReviewResult/1.0` | `/reviewing` |
-| `agent-dispatch` | Codex / Gemini / Claude role division reference | `/design`, `/reviewing` |
-| `ux-comm` | UX communication rules (timing semantics, plain language, copy-pasteable steps) | Before any user-facing report |
-| `empirical-prompt-tuning` | Bias-free iterative prompt validation via blank subagents | When creating or revising any skill / slash command |
+| `/strategy` | Reads the current project state and proposes 3 directions | Choose A / B / C |
+| `/design` | Builds an implementation plan and acceptance criteria | Approve the plan |
+| `/implement` | Writes code according to the approved plan | Usually none |
+| `/debugging` | Proves the acceptance criteria with tests or scripts | Only if blocked |
+| `/reviewing` | Reviews the diff before saving | Fix if needed |
+| `/save` | Updates docs, commits, pushes | Approve before VCS write |
 
-`empirical-prompt-tuning` is a Japanese translation/adaptation of [@mizchi](https://github.com/mizchi)'s upstream skill — see [Acknowledgments](#acknowledgments).
-
----
-
-## Workflow
-
-### Full Workflow (default)
-
-```
-/strategy ──→ /design ──→ /implement ──→ /debugging ──→ /reviewing ──→ /save
-     │                                                                    │
-     └── or /strategy_deep (multi-round)                                  └── next phase
-```
-
-### Fast Path (minor changes)
-
-When `workflow.fast_path_allowed: true` and the change is small (3 files or fewer, no design decisions):
-
-```
-/implement ──→ /debugging ──→ /reviewing ──→ /save
-```
-
-### Quality Gates
-
-| Gate | Rule |
-|------|------|
-| `/strategy` → `/design` | User must choose a direction first |
-| `/design` → `/implement` | User must approve the plan |
-| `/implement` → `/save` | Must pass `/debugging` + `/reviewing` |
-| `/save` completion | Must push before proposing next phase |
+`/save` always requires explicit approval because it can commit and push.
 
 ---
 
-## External Tools (Optional)
+## Fast path for small changes
 
-The kit works standalone. These tools add extra capabilities when available:
+If the change is small and concrete, the kit can skip strategy and design.
 
-| Tool | What it adds | Required? |
-|------|-------------|-----------|
-| [Codex CLI](https://github.com/openai/codex) | Independent code/design review | No |
-| [Gemini CLI](https://github.com/google-gemini/gemini-cli) | Large-scale analysis, research | No |
-| [GitHub CLI](https://cli.github.com/) | Issue/Milestone management | No |
+Fast path is allowed only when all of these are true:
 
-Enable in `.claude/workflow.yaml`:
+1. the change affects **3 files or fewer**
+2. no design decision is needed
+3. the user gave a specific instruction
+
+```text
+/implement → /debugging → /reviewing → /save
+```
+
+Even on the fast path, debug and review are not skipped.
+
+---
+
+## Command guide
+
+You usually only type `/strategy`.
+
+| Command | Use it when | Output |
+|---|---|---|
+| `/strategy` | You want Claude to choose the next direction with you | 3 options + recommendation |
+| `/strategy_deep` | The decision is high-stakes or structurally complex | Multi-round critique + final options |
+| `/design` | You already know the direction and want a plan | Implementation plan + acceptance criteria |
+| `/implement` | You have an approved plan | Code changes + verification loop |
+| `/debugging` | You need to prove behavior or isolate bugs | Test/proof loop |
+| `/reviewing` | You need a pre-save review | `lgtm`, `needs_fix`, or `blocker` |
+| `/save` | Work is reviewed and ready to record | Commit / push / devlog update |
+| `/restart` | A Claude Code session was interrupted | Recovery from the last known state |
+
+---
+
+## Bundled skills
+
+The kit includes focused skills that support the workflow.
+
+| Skill | Purpose |
+|---|---|
+| `plan-researcher` | Finds relevant files, dependencies, risks, and constraints before implementation |
+| `codex-analyst` | Sends code or plans to Codex CLI for independent review when available |
+| `agent-dispatch` | Defines when to use Claude, Codex, Gemini, or subagents |
+| `ux-comm` | Keeps reports understandable: timing, plain language, copy-pasteable steps |
+| `empirical-prompt-tuning` | Tests and improves skills / slash commands with blank-agent iterations |
+
+These are optional in the sense that the workflow can fall back to Claude-only behavior, but they are part of the intended kit.
+
+---
+
+## Optional external tools
+
+The kit works with Claude Code alone.
+
+External tools add extra review and analysis capacity.
+
+| Tool | Adds | Required |
+|---|---|---|
+| Codex CLI | Independent code and plan review | No |
+| Gemini CLI | Large-context research and broad analysis | No |
+| GitHub CLI | Issue and milestone operations | No |
+
+Enable them in `.claude/workflow.yaml`:
 
 ```yaml
 tools:
@@ -192,101 +266,142 @@ tools:
   gh: true
 ```
 
----
-
-## Generated Files
-
-After scaffolding, these files are created (existing files are never overwritten):
-
-| File | Purpose |
-|------|---------|
-| `tasks/current.md` | Active task tracking |
-| `tasks/lessons.md` | Session learnings and error patterns |
-| `tasks/strategy_context.md` | Strategy forging results (used by `/strategy_deep` → `/design`) |
-| `docs/ROADMAP.md` | Project progress overview |
-| `docs/DEVLOG.md` | Dev log index |
-| `docs/devlog/` | Per-session detailed logs |
+If a tool is unavailable, the workflow falls back to Claude self-analysis.
 
 ---
 
 ## Configuration
 
-`.claude/workflow.yaml` is placed during setup. **It works out of the box** — only customize if your project uses different paths.
+The default config works out of the box.
 
 ```yaml
 paths:
-  tasks: tasks/current.md     # your task file
-  lessons: tasks/lessons.md   # your lessons file
-  roadmap: docs/ROADMAP.md    # your roadmap
+  tasks: tasks/current.md
+  lessons: tasks/lessons.md
+  roadmap: docs/ROADMAP.md
+  devlog_dir: docs/devlog/
+  devlog_index: docs/DEVLOG.md
+
+workflow:
+  fast_path_allowed: true
+  auto_continue: true
+
+git:
+  commit_style: conventional
+  show_summary: true
 ```
 
----
-
-## Failure Modes
-
-| Scenario | What happens | What to do |
-|----------|-------------|------------|
-| Claude skips `/reviewing` | Workflow gate prevents `/save` | Run `/reviewing` first |
-| Session interrupted mid-implementation | State is lost | Run `/restart` to recover |
-| `/strategy_deep` runs too many rounds | Context degrades | Stop at Round 3 unless issues remain critical |
-| External tool (Codex/Gemini) unavailable | Falls back to Claude self-analysis | Results are marked `(Claude fallback)` |
-| `strategy_context.md` is stale (>24h) | `/design` may use outdated strategy | Re-run `/strategy` or `/strategy_deep` |
+Only edit this when your project uses different paths or you want to disable auto-continuation.
 
 ---
 
-## Pre-release Verification
-
-When you author or substantially revise a skill / slash command, verify it before bundling.
+## Generated files
 
 | File | Purpose |
 |---|---|
-| [`evaluation/skill-quality-rubric.md`](evaluation/skill-quality-rubric.md) | 7-axis weighted rubric (trigger fit / self-containment / clarity / subagent-schema compliance / exit conditions / golden examples / communication). Pass ≥80, Conditional 70–79, Fail ≤69. 6 auto-fail conditions. |
-| [`evaluation/skill-tuning-log.md`](evaluation/skill-tuning-log.md) | Per-skill iteration log paired with `empirical-prompt-tuning`. Records Iter 0 (static integrity check) → Iter N (dispatch-based blind test). |
+| `tasks/current.md` | Active task list and implementation plan |
+| `tasks/lessons.md` | Repeated mistakes and project lessons |
+| `tasks/strategy_context.md` | Output from `/strategy_deep`, consumed by `/design` |
+| `docs/ROADMAP.md` | Project progress overview |
+| `docs/DEVLOG.md` | Development log index |
+| `docs/devlog/` | Per-session detailed logs |
 
-Procedure:
-
-1. **Iter 0 (static)** — score the skill against the 7-axis rubric without dispatch. Reconcile any frontmatter `description` ↔ body gap before moving on.
-2. **Iter N (empirical)** — invoke `empirical-prompt-tuning` to dispatch blank subagents on prepared scenarios; record results in the tuning log.
-3. **Convergence** — 2 consecutive iterations with zero new unclear points + metric variation within thresholds, or release at the 80-point line if the skill is non-critical.
-
-The five bundled skills passed Iter 0 at 88–98 points (recorded in [`evaluation/skill-tuning-log.md`](evaluation/skill-tuning-log.md)).
+Existing files are not overwritten unless you use the force option.
 
 ---
 
-## Upgrading
+## Safety model
 
-If you installed a previous version and want to add `/strategy_deep`:
+This kit is intentionally not “full autonomy.”
 
-1. Copy `commands/strategy_deep.md` to `.claude/commands/`
-2. Copy `rules/agent-critics.md` to `.claude/rules/`
-3. Replace `commands/strategy.md`, `commands/design.md`, `commands/restart.md` with the updated versions
-4. Create `tasks/strategy_context.md` (empty template — see scaffold output)
+It uses gates:
 
-Or re-run `./scaffold.sh --force /path/to/your/project` to overwrite all files.
+- Claude does not choose the strategic direction for you
+- Claude does not implement until you approve the plan
+- Claude does not save until debug and review pass
+- Claude does not commit or push without explicit approval
+- Claude should not stage everything with `git add .`
+
+Important: this is prompt engineering, not a mechanical guarantee. It improves consistency by giving Claude a stable playbook, but you should still review meaningful changes.
 
 ---
 
-## Design Philosophy
+## Troubleshooting
 
-This kit doesn't aim for full AI autonomy. It standardizes the procedural steps so **humans focus on decisions, not process**.
+### `/strategy` works, but later steps are not found
 
-Every command stops at decision points and waits for your input. Claude handles the mechanical work between those points.
+Check that project commands and skills were installed:
 
-> **Important**: This kit is prompt engineering — it guides Claude's behavior through markdown instructions, not enforced logic. The quality depends on the model following the instructions, which it does reliably but not with mechanical guarantees.
+```bash
+ls .claude/commands
+ls .claude/skills
+```
+
+### Claude seems to skip review
+
+Run:
+
+```text
+/reviewing
+```
+
+Then save only after the verdict is `lgtm`.
+
+### A session was interrupted
+
+Run:
+
+```text
+/restart
+```
+
+It checks git status, task state, and any interrupted `/strategy_deep` context.
+
+### External tools fail
+
+Set them to `false` in `.claude/workflow.yaml`:
+
+```yaml
+tools:
+  codex: false
+  gemini: false
+  gh: false
+```
+
+The workflow will use Claude-only fallback behavior.
+
+---
+
+## Who this is for
+
+This is especially useful if:
+
+- you are vibe coding but want less chaos
+- your project has grown beyond “one file and vibes”
+- you want AI to keep records of what it changed
+- you want review and verification to happen every time
+- you need a way to keep concept, implementation, and roadmap aligned
+
+It is not ideal if:
+
+- you only want one-off code snippets
+- you do not use Claude Code
+- you want a deterministic build system or CI replacement
+- you want the AI to make all product decisions without you
 
 ---
 
 ## Acknowledgments
 
-- **`empirical-prompt-tuning` skill**: Japanese translation/adaptation of [`empirical-prompt-tuning`](https://github.com/mizchi/skills/tree/main/empirical-prompt-tuning) by [@mizchi](https://github.com/mizchi). Original work © mizchi, MIT-licensed. Full attribution and license text in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md). Note that the upstream version has since added several sections (Failure pattern ledger, Variant exploration, 4-phase trace interpretation, Fix propagation patterns, Environment constraints, Structural review mode) that CEWK has not yet backported.
-- **`evaluation/skill-quality-rubric.md` structural template**: borrowed the 5-band + weighted + auto-fail framework from [`docs/evaluation-rubric.md`](https://github.com/RNA4219/manual-bb-test-harness/blob/main/docs/evaluation-rubric.md) in [RNA4219/manual-bb-test-harness](https://github.com/RNA4219/manual-bb-test-harness). The structural skeleton only — categories, weights, and auto-fail conditions are CEWK-specific and rewritten for skill-quality evaluation. We do **not** use manual-bb-test-harness as a runtime test harness for CEWK skills.
+- `empirical-prompt-tuning` is a Japanese translation/adaptation of `empirical-prompt-tuning` by @mizchi.
+- The evaluation rubric structure was inspired by the 5-band / weighted / auto-fail framework from `manual-bb-test-harness`, rewritten for CEWK skill evaluation.
+
+See `THIRD_PARTY_LICENSES.md` for details.
 
 ---
 
 ## License
 
-MIT — see [`LICENSE`](LICENSE). Third-party licenses for bundled adaptations are listed in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
-
----
+MIT — see `LICENSE`.
 
 [日本語版はこちら / Japanese version](README.ja.md)
