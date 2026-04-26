@@ -1,6 +1,6 @@
 # Claude Easy Workflow Kit
 
-🇯🇵 **日本語で読みたい方はこちら → [README.ja.md](README.ja.md)**  
+**日本語で読みたい方はこちら → [README.ja.md](README.ja.md)**  
 Japanese guide available here.
 
 **A Claude Code workflow kit for vibe coding without losing the thread.**
