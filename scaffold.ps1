@@ -8,8 +8,15 @@ param(
 
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$ProjectPath = Resolve-Path $ProjectPath -ErrorAction SilentlyContinue
-if (-not $ProjectPath) { $ProjectPath = "." }
+$ResolvedProject = Resolve-Path $ProjectPath -ErrorAction SilentlyContinue
+if (-not $ResolvedProject) { $ResolvedProject = Resolve-Path "." }
+$ProjectPath = $ResolvedProject.Path
+
+# Refuse to scaffold the kit into itself
+if ($ProjectPath -eq $ScriptDir) {
+    Write-Error "Refusing to scaffold into the kit's own directory ($ScriptDir). Pass an explicit project path: .\scaffold.ps1 -ProjectPath C:\path\to\your\project [-Force]"
+    exit 1
+}
 
 Write-Host "=== claude-easy-workflow-kit scaffold ===" -ForegroundColor Cyan
 Write-Host "Project: $ProjectPath"
@@ -40,24 +47,33 @@ function Create-IfNotExists {
 }
 
 # --- .claude/commands/ ---
-Write-Host "[1/4] Commands..."
+Write-Host "[1/5] Commands..."
 Get-ChildItem "$ScriptDir\commands\*.md" | ForEach-Object {
     Copy-IfNotExists $_.FullName "$ProjectPath\.claude\commands\$($_.Name)"
 }
 
 # --- .claude/rules/ ---
-Write-Host "[2/4] Rules..."
+Write-Host "[2/5] Rules..."
 Get-ChildItem "$ScriptDir\rules\*.md" | ForEach-Object {
     Copy-IfNotExists $_.FullName "$ProjectPath\.claude\rules\$($_.Name)"
 }
 
+# --- .claude/skills/ ---
+Write-Host "[3/5] Skills..."
+Get-ChildItem "$ScriptDir\skills" -Directory | ForEach-Object {
+    $skillName = $_.Name
+    Get-ChildItem $_.FullName -File | ForEach-Object {
+        Copy-IfNotExists $_.FullName "$ProjectPath\.claude\skills\$skillName\$($_.Name)"
+    }
+}
+
 # --- schemas/ + workflow.yaml ---
-Write-Host "[3/4] Schemas & config..."
+Write-Host "[4/5] Schemas & config..."
 Copy-IfNotExists "$ScriptDir\schemas\handoff.md" "$ProjectPath\.claude\schemas\handoff.md"
 Copy-IfNotExists "$ScriptDir\workflow.yaml" "$ProjectPath\.claude\workflow.yaml"
 
 # --- Project scaffolding ---
-Write-Host "[4/4] Project scaffolding..."
+Write-Host "[5/5] Project scaffolding..."
 
 Create-IfNotExists "$ProjectPath\tasks\current.md" @"
 # Current Tasks
@@ -109,7 +125,7 @@ $devlogDir = "$ProjectPath\docs\devlog"
 if (-not (Test-Path $devlogDir)) { New-Item -ItemType Directory -Path $devlogDir -Force | Out-Null }
 
 Write-Host ""
-Write-Host "Done! Your project is ready to use /strategy, /strategy_deep, /design, /implement, /debug, /review, /save, /restart." -ForegroundColor Cyan
+Write-Host "Done! Your project is ready to use /strategy, /strategy_deep, /design, /implement, /debugging, /reviewing, /save, /restart." -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Next steps:"
 Write-Host "  1. Edit .claude/workflow.yaml to match your project (paths, tools, etc.)"

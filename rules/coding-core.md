@@ -1,6 +1,6 @@
 # コーディング規約 — Core
 
-> プロジェクト横断の普遍規約。作業範囲ガードは `rules/scope-guard.md`、サブエージェント出力 schema は `rules/subagent-schema.md` を参照。
+> プロジェクト横断の普遍規約。作業範囲ガードは `.claude/rules/scope-guard.md`、サブエージェント出力 schema は `.claude/rules/subagent-schema.md` を参照。
 
 ---
 
@@ -52,4 +52,4 @@
 
 8. **テスト失敗時に期待値を書き換える前に、コード側がバグである可能性を常に検討する**
    - 書き換えるなら「なぜ前の期待値が誤りか」を 1 行で根拠付ける
-   - 詳細は `rules/scope-guard.md` 項目 4 を参照
+   - 詳細は `.claude/rules/scope-guard.md` 項目 4 を参照

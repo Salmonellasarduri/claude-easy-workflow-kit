@@ -45,14 +45,14 @@ git:
 
 # --- ワークフロー設定 ---
 workflow:
-  # Full workflow: /strategy → /design → /implement → /debug → /review → /save
-  # Fast path:    /implement → /review → /save（小修正・緊急修正用）
+  # Full workflow: /strategy → /design → /implement → /debugging → /reviewing → /save
+  # Fast path:    /implement → /reviewing → /save（小修正・緊急修正用）
   #
   # fast_path_allowed: true にすると、Claude が変更規模を判断して
   # strategy/design をスキップできる。false なら常に Full workflow。
   fast_path_allowed: true
 
   # Auto-continue: ユーザーの決定後に次のコマンドへ自動で進む。
-  # true (デフォルト): /strategy → 選択後に自動 /design → 承認後に自動 /implement → /debug → /review → /save 促し
+  # true (デフォルト): /strategy → 選択後に自動 /design → 承認後に自動 /implement → /debugging → /reviewing → /save 促し
   # false: ユーザーが各コマンドを手動で呼び出す
   auto_continue: true

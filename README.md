@@ -54,8 +54,10 @@ Claude: (commits, pushes, updates docs)
 Under the hood, Claude chains these steps automatically:
 
 ```
-/strategy → /design → /implement → /debug → /review → /save
+/strategy → /design → /implement → /debugging → /reviewing → /save
 ```
+
+> **Naming note**: `/debugging` and `/reviewing` use gerund form to avoid collisions with Claude Code's bundled `/debug` skill and `/review` built-in command (skills/built-ins take precedence over project commands, so same-name project commands silently fail to load).
 
 You're only asked at decision points:
 
@@ -106,19 +108,19 @@ Creates a detailed implementation plan with acceptance criteria. Automatically r
 
 ### `/implement`
 
-Writes code following the approved plan. Calls `/debug` automatically.
+Writes code following the approved plan. Calls `/debugging` automatically.
 
-### `/debug`
+### `/debugging`
 
-Tests and verifies changes. Loops until acceptance criteria are proven.
+Tests and verifies changes. Loops until acceptance criteria are proven. (Named `/debugging` rather than `/debug` to avoid collision with Claude Code's bundled `/debug` skill.)
 
-### `/review`
+### `/reviewing`
 
-Code review. Uses Codex CLI if available, otherwise self-reviews against a checklist.
+Code review. Uses Codex CLI if available, otherwise self-reviews against a checklist. (Named `/reviewing` rather than `/review` to avoid collision with Claude Code's built-in `/review` command.)
 
 ### `/save`
 
-Commits, pushes, and updates documentation. Only runs after `/review` passes.
+Commits, pushes, and updates documentation. Only runs after `/reviewing` passes.
 
 ### `/restart`
 
@@ -133,8 +135,8 @@ Five skills are bundled in [`skills/`](skills/) and loaded on demand by the comm
 | Skill | Purpose | Loaded by |
 |---|---|---|
 | `plan-researcher` | Codebase investigation, returns `ResearchResult/1.0` | `/design` |
-| `codex-analyst` | Code/plan review via Codex CLI, returns `ReviewResult/1.0` | `/review` |
-| `agent-dispatch` | Codex / Gemini / Claude role division reference | `/design`, `/review` |
+| `codex-analyst` | Code/plan review via Codex CLI, returns `ReviewResult/1.0` | `/reviewing` |
+| `agent-dispatch` | Codex / Gemini / Claude role division reference | `/design`, `/reviewing` |
 | `ux-comm` | UX communication rules (timing semantics, plain language, copy-pasteable steps) | Before any user-facing report |
 | `empirical-prompt-tuning` | Bias-free iterative prompt validation via blank subagents | When creating or revising any skill / slash command |
 
@@ -147,9 +149,9 @@ Five skills are bundled in [`skills/`](skills/) and loaded on demand by the comm
 ### Full Workflow (default)
 
 ```
-/strategy ──→ /design ──→ /implement ──→ /debug ──→ /review ──→ /save
-     │                                                            │
-     └── or /strategy_deep (multi-round)                          └── next phase
+/strategy ──→ /design ──→ /implement ──→ /debugging ──→ /reviewing ──→ /save
+     │                                                                    │
+     └── or /strategy_deep (multi-round)                                  └── next phase
 ```
 
 ### Fast Path (minor changes)
@@ -157,7 +159,7 @@ Five skills are bundled in [`skills/`](skills/) and loaded on demand by the comm
 When `workflow.fast_path_allowed: true` and the change is small (3 files or fewer, no design decisions):
 
 ```
-/implement ──→ /debug ──→ /review ──→ /save
+/implement ──→ /debugging ──→ /reviewing ──→ /save
 ```
 
 ### Quality Gates
@@ -166,7 +168,7 @@ When `workflow.fast_path_allowed: true` and the change is small (3 files or fewe
 |------|------|
 | `/strategy` → `/design` | User must choose a direction first |
 | `/design` → `/implement` | User must approve the plan |
-| `/implement` → `/save` | Must pass `/debug` + `/review` |
+| `/implement` → `/save` | Must pass `/debugging` + `/reviewing` |
 | `/save` completion | Must push before proposing next phase |
 
 ---
@@ -224,7 +226,7 @@ paths:
 
 | Scenario | What happens | What to do |
 |----------|-------------|------------|
-| Claude skips `/review` | Workflow gate prevents `/save` | Run `/review` first |
+| Claude skips `/reviewing` | Workflow gate prevents `/save` | Run `/reviewing` first |
 | Session interrupted mid-implementation | State is lost | Run `/restart` to recover |
 | `/strategy_deep` runs too many rounds | Context degrades | Stop at Round 3 unless issues remain critical |
 | External tool (Codex/Gemini) unavailable | Falls back to Claude self-analysis | Results are marked `(Claude fallback)` |

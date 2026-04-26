@@ -1,13 +1,13 @@
 ---
 name: agent-dispatch
-description: "Use this skill when deciding which sub-agent (Codex / Gemini / Agent tool) to dispatch for a task, when the task matches patterns like cross-cutting codebase investigation, external spec research, algorithm verification, or pre-commit review. Defines role division, mandatory invocation timings (/design pre-presentation, /save pre-commit, algorithm correctness checks), and output summarization rules. Load this at the start of /design, /review, or whenever agent dispatch judgment is needed."
+description: "Use this skill when deciding which sub-agent (Codex / Gemini / Agent tool) to dispatch for a task, when the task matches patterns like cross-cutting codebase investigation, external spec research, algorithm verification, or pre-commit review. Defines role division, mandatory invocation timings (/design pre-presentation, /save pre-commit, algorithm correctness checks), and output summarization rules. Load this at the start of /design, /reviewing, or whenever agent dispatch judgment is needed."
 metadata:
   version: 1.0.0
 ---
 
 # agent-dispatch — エージェント役割分担
 
-> 出力 schema は `rules/subagent-schema.md` を参照（常時 auto-load）。
+> 出力 schema は `.claude/rules/subagent-schema.md` を参照（常時 auto-load）。
 
 ## 基本原則
 
@@ -41,7 +41,7 @@ metadata:
 ```bash
 codex exec "（質問・依頼）"
 # コードレビュー: diff は一時ファイル経由で stdin に渡す（sandbox が Windows でシェル不可のため）
-# 詳細は commands/review.md を参照
+# 詳細は commands/reviewing.md を参照
 ```
 
 **フォールバック**: 認証エラー/タイムアウト → 自己解決。ユーザーへの報告不要。
@@ -92,4 +92,4 @@ Codex / Gemini から大きな出力が返ってきた場合:
 1. **要約してからメインコンテキストに返す**
 2. 全文をそのまま貼り付けない
 3. 重要な判断・警告・推奨だけを抽出する
-4. サブエージェント呼出時は `rules/subagent-schema.md` の 4 項目 schema を末尾に必ず添える
+4. サブエージェント呼出時は `.claude/rules/subagent-schema.md` の 4 項目 schema を末尾に必ず添える

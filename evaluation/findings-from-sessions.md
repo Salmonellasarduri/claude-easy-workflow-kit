@@ -61,7 +61,7 @@
 |------|---------|---------|
 | 素 Claude Code | ○ | なし |
 | superpowers | × (brainstorm で仕様変質) | なし |
-| CEWK | ○ | /debug 8項目 + /review 9項目 |
+| CEWK | ○ | /debugging 8項目 + /reviewing 9項目 |
 
 「仕様が変わったことに気づけない」のは文系ユーザーにとって最大のリスク。CEWK はそのリスクを構造的に排除する。
 

@@ -37,7 +37,7 @@ error: null
 
 ---
 
-## ReviewResult — /review の出力
+## ReviewResult — /reviewing の出力
 
 ```yaml
 schema: ReviewResult/1.0

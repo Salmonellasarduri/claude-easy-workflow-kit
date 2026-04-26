@@ -82,7 +82,7 @@ error: null
 判断はしないこと。事実と証拠のみ。
 ```
 
-サブエージェント呼出時は `rules/subagent-schema.md` の 4 項目 schema を末尾に必ず添える。
+サブエージェント呼出時は `.claude/rules/subagent-schema.md` の 4 項目 schema を末尾に必ず添える。
 
 ## 結果の扱い方
 

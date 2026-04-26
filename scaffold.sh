@@ -2,24 +2,42 @@
 set -euo pipefail
 
 # claude-easy-workflow-kit scaffold
-# Usage: ./scaffold.sh [project-path]
-# Default: current directory
+# Usage: ./scaffold.sh [--force] [project-path]
+#        ./scaffold.sh [project-path] [--force]
+# Default project-path: current directory
 
-PROJECT_DIR="${1:-.}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 FORCE=false
+PROJECT_DIR=""
 
-# Parse flags
+# Parse args (flags can appear in any position)
 for arg in "$@"; do
   case "$arg" in
     --force) FORCE=true ;;
-    -*) echo "Unknown flag: $arg"; exit 1 ;;
+    -h|--help)
+      echo "Usage: $0 [--force] [project-path]"
+      echo "  --force        overwrite existing files"
+      echo "  project-path   destination directory (default: current dir)"
+      exit 0
+      ;;
+    -*) echo "Unknown flag: $arg" >&2; exit 1 ;;
+    *)
+      if [[ -n "$PROJECT_DIR" ]]; then
+        echo "Error: multiple project paths given ('$PROJECT_DIR' and '$arg')" >&2
+        exit 1
+      fi
+      PROJECT_DIR="$arg"
+      ;;
   esac
 done
 
-# Remove flags from PROJECT_DIR
-if [[ "$PROJECT_DIR" == --* ]]; then
-  PROJECT_DIR="."
+PROJECT_DIR="${PROJECT_DIR:-.}"
+
+# Refuse to scaffold the kit into itself (catches accidental `./scaffold.sh --force` with no path)
+if [[ "$(cd "$PROJECT_DIR" && pwd)" == "$SCRIPT_DIR" ]]; then
+  echo "Error: refusing to scaffold into the kit's own directory ($SCRIPT_DIR)." >&2
+  echo "       Pass an explicit project path: $0 [--force] /path/to/your/project" >&2
+  exit 1
 fi
 
 echo "=== claude-easy-workflow-kit scaffold ==="
@@ -40,27 +58,38 @@ copy_if_not_exists() {
 }
 
 # --- .claude/commands/ ---
-echo "[1/4] Commands..."
+echo "[1/5] Commands..."
 for f in "$SCRIPT_DIR"/commands/*.md; do
   name="$(basename "$f")"
   copy_if_not_exists "$f" "$PROJECT_DIR/.claude/commands/$name"
 done
 
 # --- .claude/rules/ ---
-echo "[2/4] Rules..."
+echo "[2/5] Rules..."
 for f in "$SCRIPT_DIR"/rules/*.md; do
   name="$(basename "$f")"
   copy_if_not_exists "$f" "$PROJECT_DIR/.claude/rules/$name"
 done
 
+# --- .claude/skills/ ---
+echo "[3/5] Skills..."
+for skill_dir in "$SCRIPT_DIR"/skills/*/; do
+  skill_name="$(basename "$skill_dir")"
+  for f in "$skill_dir"*; do
+    [[ -f "$f" ]] || continue
+    fname="$(basename "$f")"
+    copy_if_not_exists "$f" "$PROJECT_DIR/.claude/skills/$skill_name/$fname"
+  done
+done
+
 # --- schemas/ + workflow.yaml ---
-echo "[3/4] Schemas & config..."
+echo "[4/5] Schemas & config..."
 mkdir -p "$PROJECT_DIR/.claude/schemas"
 copy_if_not_exists "$SCRIPT_DIR/schemas/handoff.md" "$PROJECT_DIR/.claude/schemas/handoff.md"
 copy_if_not_exists "$SCRIPT_DIR/workflow.yaml" "$PROJECT_DIR/.claude/workflow.yaml"
 
 # --- Project scaffolding (tasks/ + docs/) ---
-echo "[4/4] Project scaffolding..."
+echo "[5/5] Project scaffolding..."
 
 create_if_not_exists() {
   local path="$1"
@@ -118,7 +147,7 @@ status: empty
 mkdir -p "$PROJECT_DIR/docs/devlog"
 
 echo ""
-echo "Done! Your project is ready to use /strategy, /strategy_deep, /design, /implement, /debug, /review, /save, /restart."
+echo "Done! Your project is ready to use /strategy, /strategy_deep, /design, /implement, /debugging, /reviewing, /save, /restart."
 echo ""
 echo "Next steps:"
 echo "  1. Edit .claude/workflow.yaml to match your project (paths, tools, etc.)"

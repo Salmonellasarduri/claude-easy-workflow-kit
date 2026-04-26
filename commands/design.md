@@ -6,7 +6,7 @@
 
 ## 重要なゲート
 
-**ユーザーに提示する前にレビューを通すこと（`/review` の B パターン参照）。**
+**ユーザーに提示する前にレビューを通すこと（`/reviewing` の B パターン参照）。**
 
 ---
 
@@ -22,16 +22,16 @@
 ### 2. コードベース調査
 
 変更対象が 2ファイル以上の場合、**Explore サブエージェント** に調査を委譲する。
-詳細な手順は `skills/plan-researcher/SKILL.md` または `rules/research-guide.md` を参照。
+詳細な手順は `.claude/skills/plan-researcher/SKILL.md` または `.claude/rules/research-guide.md` を参照。
 
-サブエージェントを呼ぶ際は `rules/subagent-schema.md` の 4 項目 schema（結論 / 根拠 / 未確定点 / 参照先）を末尾に添えること。生出力をそのままメインに展開しない。
+サブエージェントを呼ぶ際は `.claude/rules/subagent-schema.md` の 4 項目 schema（結論 / 根拠 / 未確定点 / 参照先）を末尾に添えること。生出力をそのままメインに展開しない。
 
 1ファイルで完結する場合は直接 Read で十分。
 
 ### Preferred Path（Codex がある場合）
 
 - Explore の調査結果を Codex に送り、抜け漏れがないかレビューさせる
-- プラン文面を `/review` の B パターンで Codex にレビューさせる
+- プラン文面を `/reviewing` の B パターンで Codex にレビューさせる
 
 ### Fallback Path（Codex なし）
 

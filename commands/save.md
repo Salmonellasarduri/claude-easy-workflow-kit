@@ -7,7 +7,7 @@
 ## 原則
 
 - **変更したセクションだけを更新する。触っていない部分は変えない。**
-- **`/review` が LGTM になっていない状態で `/save` を実行しない。**
+- **`/reviewing` が LGTM になっていない状態で `/save` を実行しない。**
 
 ---
 
@@ -29,14 +29,14 @@ git status
 git diff --stat
 ```
 
-ファイル変更がない場合はスキップ。`/review` 未実施なら先に実行する。
+ファイル変更がない場合はスキップ。`/reviewing` 未実施なら先に実行する。
 
 ### 1. ドキュメント更新
 
-`rules/doc-update-guide.md` のチェックリストに従ってドキュメントを更新する。
+`.claude/rules/doc-update-guide.md` のチェックリストに従ってドキュメントを更新する。
 
 **大規模な変更**: general-purpose サブエージェントに委譲
-（`rules/doc-update-guide.md` の委譲テンプレート参照）
+（`.claude/rules/doc-update-guide.md` の委譲テンプレート参照）
 
 **小規模な変更**: 直接更新
 - タスクファイルの完了タスクに `[x]` を付ける

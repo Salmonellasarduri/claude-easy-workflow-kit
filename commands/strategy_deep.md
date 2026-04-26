@@ -61,7 +61,7 @@ Build the strategy skeleton:
 
 **Fix the roles. Do not send generic "review this" — constrain the perspective.**
 
-Refer to `rules/agent-critics.md` for the role prompts.
+Refer to `.claude/rules/agent-critics.md` for the role prompts.
 
 ##### Preferred Path (external tools available)
 
@@ -72,7 +72,7 @@ Run in parallel based on `workflow.yaml` tool settings:
 
 ##### Fallback Path (no external tools)
 
-Spawn two **Claude sub-agents** with the role prompts from `rules/agent-critics.md`:
+Spawn two **Claude sub-agents** with the role prompts from `.claude/rules/agent-critics.md`:
 - Sub-agent 1: Technical Critic role
 - Sub-agent 2: Product Critic role
 
