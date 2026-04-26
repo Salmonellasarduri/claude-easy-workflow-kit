@@ -1,6 +1,6 @@
 # セッションログから見えた CEWK ワークフローの実践的価値
 
-> 7,666セッション（Artificial Personality プロジェクト）から、strategy_deep 使用220セッションを中心に抽出。
+> Artificial Personality プロジェクトの 1,600+ の実質的な開発セッション（プロジェクト全体は 7,666 JSONL、うち >200KB の substantive interaction 1,600+）から、`/strategy_deep` を使用した 220 セッションを中心に抽出。
 
 ---
 
