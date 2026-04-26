@@ -17,6 +17,9 @@
 
 #### Preferred Path（Codex がある場合）
 
+`skills/codex-analyst/SKILL.md` の呼び出しパターンに従う。
+**前提読込（必須）**: レビュー開始前に `rules/scope-guard.md` を読み込み、共通原則・例外テンプレート・5 禁止項目を確認すること（観点 6 のスコープ外検知で使う）。
+
 ```bash
 {
   cat <<'PROMPT'
@@ -27,9 +30,15 @@
 3. エラーハンドリング（特に不可逆な操作）
 4. 設計・コーディング規約への準拠
 5. より良い実装案
+6. **スコープ外変更の検知**（`rules/scope-guard.md` 参照）— 以下 4 ステップで確認:
+   1. 指示対象ファイル/シンボルを依頼文から列挙
+   2. diff の変更ファイル一覧と照合
+   3. rename / format-only / test expectation change / revert を個別確認
+   4. 共通例外テンプレート 4 条件を満たさない逸脱があれば issue として明示報告
 
 出力形式:
 schema: ReviewResult/1.0
+producer: codex-analyst
 verdict: lgtm | needs_fix | blocker
 issues: [...]
 recommendations: [...]
