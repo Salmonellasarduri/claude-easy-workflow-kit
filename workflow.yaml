@@ -6,10 +6,10 @@
 
 # --- パス設定 ---
 paths:
-  # アクティブタスク（/plan, /implement, /restart が参照）
+  # アクティブタスク（/design, /implement, /restart が参照）
   tasks: tasks/current.md
 
-  # 自己改善ログ（/plan, /strategy が参照）
+  # 自己改善ログ（/design, /strategy が参照）
   lessons: tasks/lessons.md
 
   # ロードマップ（/strategy, /save が参照）
@@ -45,9 +45,14 @@ git:
 
 # --- ワークフロー設定 ---
 workflow:
-  # Full workflow: /strategy → /plan → /implement → /debug → /review → /save
+  # Full workflow: /strategy → /design → /implement → /debug → /review → /save
   # Fast path:    /implement → /review → /save（小修正・緊急修正用）
   #
   # fast_path_allowed: true にすると、Claude が変更規模を判断して
-  # strategy/plan をスキップできる。false なら常に Full workflow。
+  # strategy/design をスキップできる。false なら常に Full workflow。
   fast_path_allowed: true
+
+  # Auto-continue: ユーザーの決定後に次のコマンドへ自動で進む。
+  # true (デフォルト): /strategy → 選択後に自動 /design → 承認後に自動 /implement → /debug → /review → /save 促し
+  # false: ユーザーが各コマンドを手動で呼び出す
+  auto_continue: true

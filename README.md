@@ -54,7 +54,7 @@ Claude: (commits, pushes, updates docs)
 Under the hood, Claude chains these steps automatically:
 
 ```
-/strategy → /plan → /implement → /debug → /review → /save
+/strategy → /design → /implement → /debug → /review → /save
 ```
 
 You're only asked at decision points:
@@ -100,7 +100,7 @@ You typically only type `/strategy` (or `/strategy_deep` for complex decisions).
 | High-stakes architectural decisions | `/strategy_deep` |
 | Quick bug fix or minor change | Neither (use fast path) |
 
-### `/plan`
+### `/design`
 
 Creates a detailed implementation plan with acceptance criteria. Automatically reads forging results from `/strategy_deep` if available.
 
@@ -131,7 +131,7 @@ Detects where an interrupted session stopped and resumes. Also detects interrupt
 ### Full Workflow (default)
 
 ```
-/strategy ──→ /plan ──→ /implement ──→ /debug ──→ /review ──→ /save
+/strategy ──→ /design ──→ /implement ──→ /debug ──→ /review ──→ /save
      │                                                            │
      └── or /strategy_deep (multi-round)                          └── next phase
 ```
@@ -148,8 +148,8 @@ When `workflow.fast_path_allowed: true` and the change is small (3 files or fewe
 
 | Gate | Rule |
 |------|------|
-| `/strategy` → `/plan` | User must choose a direction first |
-| `/plan` → `/implement` | User must approve the plan |
+| `/strategy` → `/design` | User must choose a direction first |
+| `/design` → `/implement` | User must approve the plan |
 | `/implement` → `/save` | Must pass `/debug` + `/review` |
 | `/save` completion | Must push before proposing next phase |
 
@@ -161,7 +161,7 @@ The kit works standalone. These tools add extra capabilities when available:
 
 | Tool | What it adds | Required? |
 |------|-------------|-----------|
-| [Codex CLI](https://github.com/openai/codex) | Independent code/plan review | No |
+| [Codex CLI](https://github.com/openai/codex) | Independent code/design review | No |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | Large-scale analysis, research | No |
 | [GitHub CLI](https://cli.github.com/) | Issue/Milestone management | No |
 
@@ -184,7 +184,7 @@ After scaffolding, these files are created (existing files are never overwritten
 |------|---------|
 | `tasks/current.md` | Active task tracking |
 | `tasks/lessons.md` | Session learnings and error patterns |
-| `tasks/strategy_context.md` | Strategy forging results (used by `/strategy_deep` → `/plan`) |
+| `tasks/strategy_context.md` | Strategy forging results (used by `/strategy_deep` → `/design`) |
 | `docs/ROADMAP.md` | Project progress overview |
 | `docs/DEVLOG.md` | Dev log index |
 | `docs/devlog/` | Per-session detailed logs |
@@ -212,7 +212,7 @@ paths:
 | Session interrupted mid-implementation | State is lost | Run `/restart` to recover |
 | `/strategy_deep` runs too many rounds | Context degrades | Stop at Round 3 unless issues remain critical |
 | External tool (Codex/Gemini) unavailable | Falls back to Claude self-analysis | Results are marked `(Claude fallback)` |
-| `strategy_context.md` is stale (>24h) | `/plan` may use outdated strategy | Re-run `/strategy` or `/strategy_deep` |
+| `strategy_context.md` is stale (>24h) | `/design` may use outdated strategy | Re-run `/strategy` or `/strategy_deep` |
 
 ---
 
@@ -222,7 +222,7 @@ If you installed a previous version and want to add `/strategy_deep`:
 
 1. Copy `commands/strategy_deep.md` to `.claude/commands/`
 2. Copy `rules/agent-critics.md` to `.claude/rules/`
-3. Replace `commands/strategy.md`, `commands/plan.md`, `commands/restart.md` with the updated versions
+3. Replace `commands/strategy.md`, `commands/design.md`, `commands/restart.md` with the updated versions
 4. Create `tasks/strategy_context.md` (empty template — see scaffold output)
 
 Or re-run `./scaffold.sh --force /path/to/your/project` to overwrite all files.

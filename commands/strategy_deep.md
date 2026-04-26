@@ -16,7 +16,7 @@ Use this when the decision is complex, high-stakes, or involves multiple viable 
 
 - Replace model-native reasoning (extended thinking). This is about **multiple perspectives**, not deeper single-model thought
 - Guarantee correctness. This is prompt engineering — the quality depends on the agents' analysis
-- Auto-continue to `/plan`. You choose when to stop and what direction to take
+- Auto-continue to `/design`. You choose when to stop and what direction to take
 
 ## Arguments
 
@@ -228,7 +228,7 @@ theme: [Theme Core]
 
 Update the task file (`workflow.yaml` → `paths.tasks`) with the next task group and acceptance criteria.
 
-**Stop here.** Do not continue to `/plan` without explicit user instruction.
+**Stop here.** Do not continue to `/design` without explicit user instruction.
 
 ---
 
@@ -268,6 +268,6 @@ This allows `/restart` to detect and resume an interrupted deep strategy session
 
 - **Do not change the Theme Core mid-session** (drift prevention lifeline)
 - **Do not pass full history to next round** (differential context only)
-- **Do not auto-continue to `/plan`** after final output
+- **Do not auto-continue to `/design`** after final output
 - **Do not skip user checkpoints** (mandatory gate after every round)
 - **Do not artificially downgrade issue severity** to fake convergence

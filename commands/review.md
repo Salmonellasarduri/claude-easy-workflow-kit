@@ -63,7 +63,7 @@ PROMPT
 
 ---
 
-### B: プランレビュー（/plan から呼ばれる場合）
+### B: プランレビュー（/design から呼ばれる場合）
 
 #### Preferred Path
 

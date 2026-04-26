@@ -109,7 +109,7 @@ create_if_not_exists "$PROJECT_DIR/docs/DEVLOG.md" "# Dev Log (Index)
 
 create_if_not_exists "$PROJECT_DIR/tasks/strategy_context.md" "# Strategy Context
 
-> This file is written by /strategy_deep and consumed by /plan.
+> This file is written by /strategy_deep and consumed by /design.
 > Do not edit manually unless you know what you are doing.
 
 status: empty
@@ -118,7 +118,7 @@ status: empty
 mkdir -p "$PROJECT_DIR/docs/devlog"
 
 echo ""
-echo "Done! Your project is ready to use /strategy, /strategy_deep, /plan, /implement, /debug, /review, /save, /restart."
+echo "Done! Your project is ready to use /strategy, /strategy_deep, /design, /implement, /debug, /review, /save, /restart."
 echo ""
 echo "Next steps:"
 echo "  1. Edit .claude/workflow.yaml to match your project (paths, tools, etc.)"
