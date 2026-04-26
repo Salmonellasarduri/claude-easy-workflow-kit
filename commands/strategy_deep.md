@@ -16,6 +16,7 @@ Use this when the decision is complex, high-stakes, or involves multiple viable 
 - A strategy that has been stress-tested from technical and product perspectives
 - A structured issue list (critical/major/minor) that shrinks each round
 - A final 3-option output with a "forging summary" showing what was caught and fixed
+- Explicit concept-drift detection — the Product Critic checks whether the proposed strategy still matches the original product concept, user promise, and project identity
 
 ## What this does NOT do
 
