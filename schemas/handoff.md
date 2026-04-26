@@ -5,6 +5,38 @@
 
 ---
 
+## ResearchResult — plan-researcher / 調査系サブエージェントの出力
+
+```yaml
+schema: ResearchResult/1.0
+producer: plan-researcher
+task: "<タスク名>"
+findings:
+  - path: "src/core/example.py"             # 関連ファイルパス（省略可）
+    summary: "処理は handle() に集中。..."
+    evidence: ["src/core/example.py:42", "config.yaml:10"]
+    confidence: high                          # high / medium / low
+risks:
+  - "config.yaml の decay タイミングが nightly job と競合する可能性"
+constraints:
+  - "外部 API 呼出は dry_run フラグでゲート"
+next_action: codex-analyst
+status: ok                                    # ok / needs_input / failed
+error: null
+```
+
+### フィールドの役割
+
+| フィールド | 必須 | 内容 |
+|------------|------|------|
+| `findings` | yes | 関連ファイル・関数の事実収集（判断は含めない） |
+| `risks` | no | 想定される潜在リスク |
+| `constraints` | no | 実装時に守るべき制約 |
+| `next_action` | no | 次に呼ぶべきサブエージェント / コマンド |
+| `status` | yes | `ok` / `needs_input`（追加情報待ち）/ `failed` |
+
+---
+
 ## ReviewResult — /review の出力
 
 ```yaml
@@ -31,7 +63,7 @@ error: null | "エラー内容"
 
 ---
 
-## PlanArtifact — /plan の最終出力
+## PlanArtifact — /design の最終出力
 
 `tasks/current.md`（または `workflow.yaml` の `paths.tasks`）に書く形式:
 
