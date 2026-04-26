@@ -1,5 +1,8 @@
 # Claude Easy Workflow Kit
 
+> 🇯🇵 **日本語で読みたい方はこちら → [README.ja.md](README.ja.md)**  
+> Japanese guide available here.
+
 **A Claude Code workflow kit for vibe coding without losing the thread.**
 
 Type `/strategy`, choose a direction, approve the plan, and let Claude move through implementation, verification, review, and saving with clear checkpoints.
