@@ -2,7 +2,7 @@
 
 A workflow automation kit for Claude Code. Type `/strategy` and Claude handles planning, implementation, testing, review, and saving — you just choose options and say yes or no.
 
-Built from 70+ real development sessions on [Artificial Personality](https://github.com/Salmonellasarduri/Artificial-Personality).
+Battle-tested across 1,600+ real development sessions on a 190K-line codebase (167K Python, 1,167 files, 900+ commits) — [Artificial Personality](https://github.com/Salmonellasarduri/Artificial-Personality), an autonomous Discord-based personality agent.
 
 ---
 
@@ -126,6 +126,22 @@ Detects where an interrupted session stopped and resumes. Also detects interrupt
 
 ---
 
+## Bundled Skills
+
+Five skills are bundled in [`skills/`](skills/) and loaded on demand by the commands above:
+
+| Skill | Purpose | Loaded by |
+|---|---|---|
+| `plan-researcher` | Codebase investigation, returns `ResearchResult/1.0` | `/design` |
+| `codex-analyst` | Code/plan review via Codex CLI, returns `ReviewResult/1.0` | `/review` |
+| `agent-dispatch` | Codex / Gemini / Claude role division reference | `/design`, `/review` |
+| `ux-comm` | UX communication rules (timing semantics, plain language, copy-pasteable steps) | Before any user-facing report |
+| `empirical-prompt-tuning` | Bias-free iterative prompt validation via blank subagents | When creating or revising any skill / slash command |
+
+`empirical-prompt-tuning` is a Japanese translation/adaptation of [@mizchi](https://github.com/mizchi)'s upstream skill — see [Acknowledgments](#acknowledgments).
+
+---
+
 ## Workflow
 
 ### Full Workflow (default)
@@ -216,6 +232,25 @@ paths:
 
 ---
 
+## Pre-release Verification
+
+When you author or substantially revise a skill / slash command, verify it before bundling.
+
+| File | Purpose |
+|---|---|
+| [`evaluation/skill-quality-rubric.md`](evaluation/skill-quality-rubric.md) | 7-axis weighted rubric (trigger fit / self-containment / clarity / subagent-schema compliance / exit conditions / golden examples / communication). Pass ≥80, Conditional 70–79, Fail ≤69. 6 auto-fail conditions. |
+| [`evaluation/skill-tuning-log.md`](evaluation/skill-tuning-log.md) | Per-skill iteration log paired with `empirical-prompt-tuning`. Records Iter 0 (static integrity check) → Iter N (dispatch-based blind test). |
+
+Procedure:
+
+1. **Iter 0 (static)** — score the skill against the 7-axis rubric without dispatch. Reconcile any frontmatter `description` ↔ body gap before moving on.
+2. **Iter N (empirical)** — invoke `empirical-prompt-tuning` to dispatch blank subagents on prepared scenarios; record results in the tuning log.
+3. **Convergence** — 2 consecutive iterations with zero new unclear points + metric variation within thresholds, or release at the 80-point line if the skill is non-critical.
+
+The five bundled skills passed Iter 0 at 88–98 points (recorded in [`evaluation/skill-tuning-log.md`](evaluation/skill-tuning-log.md)).
+
+---
+
 ## Upgrading
 
 If you installed a previous version and want to add `/strategy_deep`:
@@ -239,9 +274,16 @@ Every command stops at decision points and waits for your input. Claude handles 
 
 ---
 
+## Acknowledgments
+
+- **`empirical-prompt-tuning` skill**: Japanese translation/adaptation of [`empirical-prompt-tuning`](https://github.com/mizchi/skills/tree/main/empirical-prompt-tuning) by [@mizchi](https://github.com/mizchi). Original work © mizchi, MIT-licensed. Full attribution and license text in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md). Note that the upstream version has since added several sections (Failure pattern ledger, Variant exploration, 4-phase trace interpretation, Fix propagation patterns, Environment constraints, Structural review mode) that CEWK has not yet backported.
+- **`evaluation/skill-quality-rubric.md` structural template**: borrowed the 5-band + weighted + auto-fail framework from [`docs/evaluation-rubric.md`](https://github.com/RNA4219/manual-bb-test-harness/blob/main/docs/evaluation-rubric.md) in [RNA4219/manual-bb-test-harness](https://github.com/RNA4219/manual-bb-test-harness). The structural skeleton only — categories, weights, and auto-fail conditions are CEWK-specific and rewritten for skill-quality evaluation. We do **not** use manual-bb-test-harness as a runtime test harness for CEWK skills.
+
+---
+
 ## License
 
-MIT
+MIT — see [`LICENSE`](LICENSE). Third-party licenses for bundled adaptations are listed in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
 
 ---
 
